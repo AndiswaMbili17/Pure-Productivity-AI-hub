@@ -158,7 +158,7 @@ function EmailPage() {
             title="Generated email"
             value={output}
             onChange={setOutput}
-            onRegenerate={() => run(variant + 1)}
+            onRegenerate={() => void run()}
             onClear={() => setOutput("")}
             onSave={() => {
               outputStore.add({
