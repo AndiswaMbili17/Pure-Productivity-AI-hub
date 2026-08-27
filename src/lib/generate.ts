@@ -13,7 +13,7 @@ export type EmailInput = {
   senderName: string;
 };
 
-const pick = <T,>(arr: T[], seed: number) => arr[Math.abs(seed) % arr.length];
+const pick = <T,>(arr: T[], seed: number): T => arr[Math.abs(seed) % arr.length] as T;
 
 function seedOf(s: string) {
   let h = 0;
@@ -35,7 +35,7 @@ function sentences(text: string) {
     .filter((s) => s.length > 24);
 }
 
-const capitalize = (s: string) => (s ? s[0].toUpperCase() + s.slice(1) : s);
+const capitalize = (s: string) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : s);
 
 export function generateEmail(input: EmailInput, variant = 0): string {
   const { purpose, recipient, keyPoints, tone, senderName } = input;
