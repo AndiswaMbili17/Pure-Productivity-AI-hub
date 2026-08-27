@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Mail, Wand2 } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
+import { Loader2, Mail, Wand2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { AppShell, PageHeader, ResponsibleAiNotice } from "@/components/AppShell";
@@ -8,7 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { generateEmail, type Tone } from "@/lib/generate";
+import { generateEmailAi } from "@/lib/ai.functions";
+import { type Tone } from "@/lib/generate";
 import { outputStore } from "@/lib/store";
 
 export const Route = createFileRoute("/email")({
