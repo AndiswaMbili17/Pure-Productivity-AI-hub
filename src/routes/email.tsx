@@ -45,15 +45,23 @@ function EmailPage() {
   const [senderName, setSenderName] = useState("");
   const [tone, setTone] = useState<Tone>("formal");
   const [output, setOutput] = useState("");
-  const [variant, setVariant] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const generate = useServerFn(generateEmailAi);
 
-  const run = (v: number) => {
+  const run = async () => {
     if (!purpose.trim() && !keyPoints.trim()) {
       toast.error("Add a purpose or some key points first");
       return;
     }
-    setVariant(v);
-    setOutput(generateEmail({ purpose, recipient, keyPoints, tone, senderName }, v));
+    setLoading(true);
+    try {
+      const text = await generate({ data: { purpose, recipient, keyPoints, tone, senderName } });
+      setOutput(text);
+    } catch (err) {
+      toast.error((err as Error).message || "Could not generate the email");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
