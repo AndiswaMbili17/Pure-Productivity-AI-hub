@@ -1,12 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Search, Wand2, AlertTriangle } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
+import { Search, Wand2, AlertTriangle, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { AppShell, PageHeader, ResponsibleAiNotice } from "@/components/AppShell";
 import { OutputPanel } from "@/components/OutputPanel";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { generateResearch, researchToText } from "@/lib/generate";
+import { generateResearchAi } from "@/lib/ai.functions";
 import { outputStore } from "@/lib/store";
 
 export const Route = createFileRoute("/research")({
@@ -31,15 +32,22 @@ export const Route = createFileRoute("/research")({
 function ResearchPage() {
   const [topic, setTopic] = useState("");
   const [output, setOutput] = useState("");
-  const [variant, setVariant] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const generate = useServerFn(generateResearchAi);
 
-  const run = (v: number) => {
+  const run = async () => {
     if (topic.trim().length < 4) {
       toast.error("Enter a topic, question or some article text");
       return;
     }
-    setVariant(v);
-    setOutput(researchToText(generateResearch(topic, v)));
+    setLoading(true);
+    try {
+      setOutput(await generate({ data: { topic } }));
+    } catch (err) {
+      toast.error((err as Error).message || "Could not generate the brief");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -71,8 +79,16 @@ function ResearchPage() {
               authoritative source.
             </span>
           </div>
-          <Button onClick={() => run(0)} className="w-full sm:w-auto">
-            <Wand2 className="size-4" /> Generate research brief
+          <Button onClick={() => void run()} disabled={loading} className="w-full sm:w-auto">
+            {loading ? (
+              <>
+                <Loader2 className="size-4 animate-spin" /> Generating…
+              </>
+            ) : (
+              <>
+                <Wand2 className="size-4" /> Generate research brief
+              </>
+            )}
           </Button>
         </section>
 
@@ -82,7 +98,7 @@ function ResearchPage() {
             value={output}
             onChange={setOutput}
             rows={22}
-            onRegenerate={() => run(variant + 1)}
+            onRegenerate={() => void run()}
             onClear={() => setOutput("")}
             onSave={() => {
               outputStore.add({

@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Mail, Wand2 } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
+import { Loader2, Mail, Wand2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { AppShell, PageHeader, ResponsibleAiNotice } from "@/components/AppShell";
@@ -8,7 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { generateEmail, type Tone } from "@/lib/generate";
+import { generateEmailAi } from "@/lib/ai.functions";
+import { type Tone } from "@/lib/generate";
 import { outputStore } from "@/lib/store";
 
 export const Route = createFileRoute("/email")({
@@ -43,15 +45,23 @@ function EmailPage() {
   const [senderName, setSenderName] = useState("");
   const [tone, setTone] = useState<Tone>("formal");
   const [output, setOutput] = useState("");
-  const [variant, setVariant] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const generate = useServerFn(generateEmailAi);
 
-  const run = (v: number) => {
+  const run = async () => {
     if (!purpose.trim() && !keyPoints.trim()) {
       toast.error("Add a purpose or some key points first");
       return;
     }
-    setVariant(v);
-    setOutput(generateEmail({ purpose, recipient, keyPoints, tone, senderName }, v));
+    setLoading(true);
+    try {
+      const text = await generate({ data: { purpose, recipient, keyPoints, tone, senderName } });
+      setOutput(text);
+    } catch (err) {
+      toast.error((err as Error).message || "Could not generate the email");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -130,8 +140,16 @@ function EmailPage() {
             </div>
           </div>
 
-          <Button onClick={() => run(0)} className="w-full sm:w-auto">
-            <Wand2 className="size-4" /> Generate email
+          <Button onClick={() => void run()} disabled={loading} className="w-full sm:w-auto">
+            {loading ? (
+              <>
+                <Loader2 className="size-4 animate-spin" /> Generating…
+              </>
+            ) : (
+              <>
+                <Wand2 className="size-4" /> Generate email
+              </>
+            )}
           </Button>
         </section>
 
@@ -140,7 +158,7 @@ function EmailPage() {
             title="Generated email"
             value={output}
             onChange={setOutput}
-            onRegenerate={() => run(variant + 1)}
+            onRegenerate={() => void run()}
             onClear={() => setOutput("")}
             onSave={() => {
               outputStore.add({
