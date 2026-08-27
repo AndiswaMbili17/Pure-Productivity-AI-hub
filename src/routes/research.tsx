@@ -32,15 +32,22 @@ export const Route = createFileRoute("/research")({
 function ResearchPage() {
   const [topic, setTopic] = useState("");
   const [output, setOutput] = useState("");
-  const [variant, setVariant] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const generate = useServerFn(generateResearchAi);
 
-  const run = (v: number) => {
+  const run = async () => {
     if (topic.trim().length < 4) {
       toast.error("Enter a topic, question or some article text");
       return;
     }
-    setVariant(v);
-    setOutput(researchToText(generateResearch(topic, v)));
+    setLoading(true);
+    try {
+      setOutput(await generate({ data: { topic } }));
+    } catch (err) {
+      toast.error((err as Error).message || "Could not generate the brief");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -72,8 +79,16 @@ function ResearchPage() {
               authoritative source.
             </span>
           </div>
-          <Button onClick={() => run(0)} className="w-full sm:w-auto">
-            <Wand2 className="size-4" /> Generate research brief
+          <Button onClick={() => void run()} disabled={loading} className="w-full sm:w-auto">
+            {loading ? (
+              <>
+                <Loader2 className="size-4 animate-spin" /> Generating…
+              </>
+            ) : (
+              <>
+                <Wand2 className="size-4" /> Generate research brief
+              </>
+            )}
           </Button>
         </section>
 
