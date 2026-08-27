@@ -1,12 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Search, Wand2, AlertTriangle } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
+import { Search, Wand2, AlertTriangle, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { AppShell, PageHeader, ResponsibleAiNotice } from "@/components/AppShell";
 import { OutputPanel } from "@/components/OutputPanel";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { generateResearch, researchToText } from "@/lib/generate";
+import { generateResearchAi } from "@/lib/ai.functions";
 import { outputStore } from "@/lib/store";
 
 export const Route = createFileRoute("/research")({
