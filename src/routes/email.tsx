@@ -140,8 +140,16 @@ function EmailPage() {
             </div>
           </div>
 
-          <Button onClick={() => run(0)} className="w-full sm:w-auto">
-            <Wand2 className="size-4" /> Generate email
+          <Button onClick={() => void run()} disabled={loading} className="w-full sm:w-auto">
+            {loading ? (
+              <>
+                <Loader2 className="size-4 animate-spin" /> Generating…
+              </>
+            ) : (
+              <>
+                <Wand2 className="size-4" /> Generate email
+              </>
+            )}
           </Button>
         </section>
 
