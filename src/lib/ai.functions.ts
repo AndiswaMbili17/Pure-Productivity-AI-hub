@@ -29,13 +29,19 @@ async function runModel({ system, prompt }: Payload) {
 
 export const generateEmailAi = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => {
-    const d = input as Record<string, string>;
+    const d = (input ?? {}) as {
+      purpose?: string;
+      recipient?: string;
+      keyPoints?: string;
+      tone?: string;
+      senderName?: string;
+    };
     return {
-      purpose: String(d?.purpose ?? "").slice(0, 2000),
-      recipient: String(d?.recipient ?? "").slice(0, 500),
-      keyPoints: String(d?.keyPoints ?? "").slice(0, 4000),
-      tone: String(d?.tone ?? "formal"),
-      senderName: String(d?.senderName ?? "").slice(0, 200),
+      purpose: String(d.purpose ?? "").slice(0, 2000),
+      recipient: String(d.recipient ?? "").slice(0, 500),
+      keyPoints: String(d.keyPoints ?? "").slice(0, 4000),
+      tone: String(d.tone ?? "formal"),
+      senderName: String(d.senderName ?? "").slice(0, 200),
     };
   })
   .handler(async ({ data }) =>
