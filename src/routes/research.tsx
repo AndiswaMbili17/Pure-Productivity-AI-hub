@@ -98,7 +98,7 @@ function ResearchPage() {
             value={output}
             onChange={setOutput}
             rows={22}
-            onRegenerate={() => run(variant + 1)}
+            onRegenerate={() => void run()}
             onClear={() => setOutput("")}
             onSave={() => {
               outputStore.add({
