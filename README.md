@@ -1,128 +1,201 @@
 # Pure Productivity Suite
+# Pure Productivity AI
 
-Pure Productivity AI
+## Project Overview
 
-Build a modern, responsive, frontend-only web application called Pure Productivity AI. The app is a professional AI workplace productivity platform that helps users automate common tasks without requiring an account.
+**Pure Productivity AI** is a modern, responsive AI-powered workplace productivity web application designed to help professionals automate and simplify common workplace tasks.
 
-Core Requirements
+The application provides three core AI tools:
 
-Create three main AI tools:Smart Email Generator
+* Smart Email Generator
+* AI Research Assistant
+* AI Workplace Assistant
 
-Generate professional workplace emails.
+The platform uses a clean, professional SaaS-style interface and is designed to be simple and accessible without requiring users to log in or register.
 
-Allow users to select a tone: Formal, Friendly, or Persuasive.
+> **Responsible AI:** AI-generated content may contain inaccuracies or outdated information. Users should review and verify important information before using it for workplace decisions or communications.
 
-Include structured input fields for the purpose, recipient/context, and key points.
+---
 
-Display the generated email in an editable text area.
+## Features Implemented
 
-Provide actions such as Copy, Regenerate, and Clear.
+### Smart Email Generator
 
-AI Research Assistant
+Helps users quickly create professional workplace emails.
 
-Allow users to enter a topic, question, or article text.
+* Generate professional emails
+* Select from Formal, Friendly, and Persuasive tones
+* Structured prompts for better outputs
+* Editable AI-generated emails
+* Copy generated content
+* Regenerate responses
+* Clear/reset functionality
 
-Generate a clear summary.
+### AI Research Assistant
 
-Present key findings, insights, and recommendations in separate sections.
+Helps users understand and summarise information.
 
-Make the generated content editable.
+* Enter a topic, question, or article
+* Generate summaries
+* Identify key findings
+* Provide insights
+* Provide recommendations
+* Edit generated outputs
+* Copy or regenerate results
+* Includes an accuracy and verification reminder
 
-Clearly indicate that users should verify important information and dates.
+### AI Workplace Assistant
 
-AI Workplace Assistant
+Provides an interactive chatbot experience for workplace-related tasks.
 
-Create a clean chatbot-style interface.
+* Conversational AI interface
+* Workplace-focused prompts
+* AI-generated responses
+* Suggested prompts
+* Editable responses
+* Copy responses
+* Clear conversation functionality
 
-Allow users to enter workplace-related prompts and questions.
+### Modern Dashboard
 
-Display conversational AI responses.
+The application includes a professional SaaS-style dashboard featuring:
 
-Include suggested prompts to help users get started.
+* Sidebar navigation
+* Quick-access tool cards
+* Recent activity
+* Responsive layout
+* Mobile-friendly navigation
+* Clean and accessible interface
 
-Allow responses to be copied or edited.
+### Responsible AI
 
-Accuracy & Responsible AI
+A responsible AI disclaimer is displayed to remind users that AI-generated information should be reviewed and verified before being used for important workplace decisions.
 
-Outputs should be designed to prioritize accurate and recent information where current information is available. Do not present AI-generated information as guaranteed fact.
+---
 
-Include a visible disclaimer:
+## Technologies and Tools Used
 
-“Responsible AI: AI-generated content may contain inaccuracies or outdated information. Review and verify important information before using it for workplace decisions or communications.”
+* **React** — User interface development
+* **JavaScript** — Application functionality
+* **HTML5** — Page structure and semantic content
+* **CSS3** — Styling and responsive design
+* **Lovable** — AI-assisted application development
+* **AI Prompt Engineering** — Structured prompts for productivity tasks
+* **Browser Local Storage** — Client-side data storage where required
+* **GitHub** — Source code management and project documentation
 
-UI & Design
+---
 
-Use a clean, modern SaaS dashboard design using primarily:
+## Design
 
-Light grey backgrounds
+Pure Productivity AI follows a modern SaaS design approach.
 
-Navy blue primary elements
+### Colour Palette
 
-White content cards
+* Light Grey — Primary background
+* Navy Blue — Primary brand and interface colour
+* White — Content cards and surfaces
 
-Professional typography
+### Design Principles
 
-Subtle borders and shadows
+* Clean and minimal interface
+* Professional appearance
+* Responsive design
+* Clear navigation
+* Accessible user experience
+* Subtle borders and shadows
+* Rounded UI components
+* Consistent spacing and typography
 
-Rounded cards and buttons
+---
 
-Clear icons
+## Setup Instructions
 
-Generous spacing
+### Prerequisites
 
-Simple, polished animations
+To run the project locally, you will need:
 
-Include a left sidebar navigation with:
+* Node.js
+* npm
+* A modern web browser
 
-Dashboard
+### Installation
 
-Email Generator
+1. Clone the repository:
 
-Research Assistant
+```bash
+git clone <repository-url>
+```
 
-Workplace Assistant
+2. Navigate to the project directory:
 
-Saved Outputs
+```bash
+cd pure-productivity-ai
+```
 
-The dashboard should provide quick-access cards for all three tools and a simple overview of recent activity.
+3. Install the dependencies:
 
-Technical Constraints
+```bash
+npm install
+```
 
-Frontend only — no backend.
+4. Start the development server:
 
-No login or registration.
-
-Do not require users to create an account.
-
-Store temporary data locally in the browser where appropriate.
-
-Keep the application lightweight and suitable for a Lovable free-tier project.
-
-Make the entire interface responsive for desktop, tablet, and mobile.
-
-Ensure navigation between tools feels seamless.
-
-Prioritize usability, accessibility, and a professional appearance.
-
-The final result should feel like a polished professional AI productivity SaaS platform, while remaining simple, lightweight, and easy to use.
-
-This project was built with [Lovable](https://lovable.dev).
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/2b401833-41b1-472d-9d63-3fb3738c0b24).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
-
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
+```bash
 npm run dev
 ```
+
+5. Open the local development URL provided by the terminal in your browser.
+
+---
+
+## Usage
+
+Pure Productivity AI does not require users to create an account or log in.
+
+From the dashboard, users can select one of the available AI tools:
+
+1. **Email Generator** — Create professional workplace emails.
+2. **Research Assistant** — Summarise topics and generate insights and recommendations.
+3. **Workplace Assistant** — Ask workplace-related questions and interact with the AI assistant.
+
+Users can review and edit generated content before copying or using it.
+
+---
+
+## Project Goals
+
+The goal of Pure Productivity AI is to demonstrate how AI can be used responsibly to improve workplace productivity.
+
+The application aims to help users:
+
+* Save time on repetitive workplace tasks
+* Improve professional communication
+* Understand information more efficiently
+* Generate useful workplace insights
+* Interact with AI through structured prompts
+* Maintain human oversight of AI-generated content
+
+---
+
+## Responsible AI Statement
+
+Pure Productivity AI is intended to assist users rather than replace human judgment.
+
+AI-generated outputs should be reviewed for:
+
+* Accuracy
+* Relevance
+* Context
+* Confidentiality
+* Professional appropriateness
+
+Users remain responsible for reviewing and approving AI-generated content before using it in professional or important decision-making contexts.
+
+---
+
+## Project Status
+
+**Status:** Completed
+
+Pure Productivity AI was developed as a frontend-focused AI productivity application demonstrating the practical use of AI-assisted workplace tools, responsive SaaS design, structured prompting, editable AI outputs, and responsible AI principles.
