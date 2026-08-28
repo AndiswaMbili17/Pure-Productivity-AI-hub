@@ -1,12 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { MessageSquare, Send, Copy, Pencil, Bookmark, Check, Trash2 } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
+import { MessageSquare, Send, Copy, Pencil, Bookmark, Check, Trash2, Loader2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { AppShell, PageHeader, ResponsibleAiNotice } from "@/components/AppShell";
 import { copyText } from "@/components/OutputPanel";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { generateAssistantReply, suggestedPrompts } from "@/lib/generate";
+import { generateAssistantAi } from "@/lib/ai.functions";
+import { suggestedPrompts } from "@/lib/generate";
 import { outputStore } from "@/lib/store";
 
 export const Route = createFileRoute("/assistant")({
@@ -34,23 +36,30 @@ function AssistantPage() {
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
+  const ask = useServerFn(generateAssistantAi);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
-  }, [messages]);
+  }, [messages, loading]);
 
-  const send = (text: string) => {
+  const send = async (text: string) => {
     const prompt = text.trim();
-    if (!prompt) return;
+    if (!prompt || loading) return;
     const userMsg: Msg = { id: crypto.randomUUID(), role: "user", text: prompt };
-    const reply: Msg = {
-      id: crypto.randomUUID(),
-      role: "assistant",
-      text: generateAssistantReply(prompt),
-    };
-    setMessages((m) => [...m, userMsg, reply]);
+    const history = messages.map((m) => ({ role: m.role, text: m.text }));
+    setMessages((m) => [...m, userMsg]);
     setInput("");
+    setLoading(true);
+    try {
+      const reply = await ask({ data: { prompt, history } });
+      setMessages((m) => [...m, { id: crypto.randomUUID(), role: "assistant", text: reply }]);
+    } catch (err) {
+      toast.error((err as Error).message || "Could not get a reply");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -72,7 +81,7 @@ function AssistantPage() {
                   {suggestedPrompts.map((p) => (
                     <button
                       key={p}
-                      onClick={() => send(p)}
+                      onClick={() => void send(p)}
                       className="rounded-full border border-border bg-secondary px-3.5 py-2 text-left text-xs font-medium text-secondary-foreground transition-colors hover:border-primary hover:bg-primary-soft"
                     >
                       {p}
@@ -145,6 +154,11 @@ function AssistantPage() {
                 ),
               )
             )}
+            {loading && (
+              <p className="text-sm text-muted-foreground" aria-live="polite">
+                Thinking…
+              </p>
+            )}
             <div ref={endRef} />
           </div>
 
@@ -152,7 +166,7 @@ function AssistantPage() {
             className="mt-5 flex items-end gap-2 border-t border-border pt-4"
             onSubmit={(e) => {
               e.preventDefault();
-              send(input);
+              void send(input);
             }}
           >
             <Textarea
@@ -162,15 +176,21 @@ function AssistantPage() {
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
-                  send(input);
+                  void send(input);
                 }
               }}
               placeholder="Ask a workplace question…"
               aria-label="Message"
               className="min-h-[3rem] resize-none"
             />
-            <Button type="submit" size="icon" aria-label="Send" className="size-11 shrink-0">
-              <Send className="size-4" />
+            <Button
+              type="submit"
+              size="icon"
+              aria-label="Send"
+              disabled={loading}
+              className="size-11 shrink-0"
+            >
+              {loading ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}
             </Button>
           </form>
           {messages.length > 0 && (
