@@ -35,23 +35,30 @@ function AssistantPage() {
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
+  const ask = useServerFn(generateAssistantAi);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
-  }, [messages]);
+  }, [messages, loading]);
 
-  const send = (text: string) => {
+  const send = async (text: string) => {
     const prompt = text.trim();
-    if (!prompt) return;
+    if (!prompt || loading) return;
     const userMsg: Msg = { id: crypto.randomUUID(), role: "user", text: prompt };
-    const reply: Msg = {
-      id: crypto.randomUUID(),
-      role: "assistant",
-      text: generateAssistantReply(prompt),
-    };
-    setMessages((m) => [...m, userMsg, reply]);
+    const history = messages.map((m) => ({ role: m.role, text: m.text }));
+    setMessages((m) => [...m, userMsg]);
     setInput("");
+    setLoading(true);
+    try {
+      const reply = await ask({ data: { prompt, history } });
+      setMessages((m) => [...m, { id: crypto.randomUUID(), role: "assistant", text: reply }]);
+    } catch (err) {
+      toast.error((err as Error).message || "Could not get a reply");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
