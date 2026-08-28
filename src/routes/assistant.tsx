@@ -6,7 +6,8 @@ import { AppShell, PageHeader, ResponsibleAiNotice } from "@/components/AppShell
 import { copyText } from "@/components/OutputPanel";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { generateAssistantReply, suggestedPrompts } from "@/lib/generate";
+import { generateAssistantAi } from "@/lib/ai.functions";
+import { suggestedPrompts } from "@/lib/generate";
 import { outputStore } from "@/lib/store";
 
 export const Route = createFileRoute("/assistant")({
