@@ -81,7 +81,7 @@ function AssistantPage() {
                   {suggestedPrompts.map((p) => (
                     <button
                       key={p}
-                      onClick={() => send(p)}
+                      onClick={() => void send(p)}
                       className="rounded-full border border-border bg-secondary px-3.5 py-2 text-left text-xs font-medium text-secondary-foreground transition-colors hover:border-primary hover:bg-primary-soft"
                     >
                       {p}
@@ -154,6 +154,11 @@ function AssistantPage() {
                 ),
               )
             )}
+            {loading && (
+              <p className="text-sm text-muted-foreground" aria-live="polite">
+                Thinking…
+              </p>
+            )}
             <div ref={endRef} />
           </div>
 
@@ -161,7 +166,7 @@ function AssistantPage() {
             className="mt-5 flex items-end gap-2 border-t border-border pt-4"
             onSubmit={(e) => {
               e.preventDefault();
-              send(input);
+              void send(input);
             }}
           >
             <Textarea
@@ -171,15 +176,21 @@ function AssistantPage() {
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
-                  send(input);
+                  void send(input);
                 }
               }}
               placeholder="Ask a workplace question…"
               aria-label="Message"
               className="min-h-[3rem] resize-none"
             />
-            <Button type="submit" size="icon" aria-label="Send" className="size-11 shrink-0">
-              <Send className="size-4" />
+            <Button
+              type="submit"
+              size="icon"
+              aria-label="Send"
+              disabled={loading}
+              className="size-11 shrink-0"
+            >
+              {loading ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}
             </Button>
           </form>
           {messages.length > 0 && (
