@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { MessageSquare, Send, Copy, Pencil, Bookmark, Check, Trash2 } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
+import { MessageSquare, Send, Copy, Pencil, Bookmark, Check, Trash2, Loader2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { AppShell, PageHeader, ResponsibleAiNotice } from "@/components/AppShell";
